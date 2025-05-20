@@ -27,7 +27,8 @@ while not quit_game:
     "\n2. Medium (5 chances)" \
     "\n3. Hard (3 chances)" \
     "\n4. Quit the game")
-    user_input = input("\nEnter your choice: ")
+
+    user_input = input("\nEnter your choice: ").strip()
 
     #Set Players chances and start game
     if user_input == "1":
@@ -39,34 +40,38 @@ while not quit_game:
     elif user_input == "3":
         print("\nGreat! You selected Hard. You have 3 chances!")
         user_chances, rand_num, attempts = start_game(3)
-        print(rand_num) #debug
     elif(user_input == "4"):
         print("\nYou're exiting the game, goodbye!")
         quit_game = True
     else:
-        print("You did not select a valid difficulty.")
+        print("\nPlease select a valid option from 1 to 4.")
 
     #loops until game is over
     while user_chances > 0:
-        user_guess = input("Enter your guess: ")
+        try:
+            user_guess = input("\nEnter your guess: ").strip()
+            if user_guess != str(rand_num) and int(user_guess) > rand_num:
+                print("Incorrect! The number is less than " + user_guess)
+                user_chances -= 1
+                attempts += 1
+                
+                if user_chances == 0:
+                    print("Nice try, unfortunately you did not guess the number.")
+            elif user_guess != str(rand_num) and int(user_guess) < rand_num:
+                print("Incorrect! The number is greater than " + user_guess)
+                user_chances -= 1
+                attempts += 1
 
-        if user_guess != str(rand_num) and int(user_guess) > rand_num:
-            print("Incorrect! The number is less than " + user_guess)
-            user_chances -= 1
-            attempts += 1
-            
-            if user_chances == 0:
-                print("Nice try, unfortunately you did not guess the number.")
-        elif user_guess != str(rand_num) and int(user_guess) < rand_num:
-            print("Incorrect! The number is greater than " + user_guess)
-            user_chances -= 1
-            attempts += 1
-
-            if user_chances == 0:
-                print("\nNice try, unfortunately you did not guess the number." \
-                "\nLet's try again though!")
-        else:
-            attempts += 1
-            print("Congrats! You guessed the correct number in " + str(attempts) + " attempts." )
-            user_chances = 0
-            break
+                if user_chances == 0:
+                    print("\nNice try, unfortunately you did not guess the number." \
+                    "\nLet's try again though!")
+            else:
+                attempts += 1
+                print("Congrats! You guessed the correct number in " + str(attempts) + " attempts." )
+                user_chances = 0
+                break
+        except ValueError:
+            print("Was expecting a number value, but was given a string instead." \
+            "\nPlease input a number.")
+        
+        
